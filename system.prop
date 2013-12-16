@@ -1,0 +1,21 @@
+#
+# system.prop for u8800PRO
+#
+ro.confg.hw_appsbootversion=U8800PROVCM7_APPSBOOT
+ro.confg.hw_appversion=U8800PROVCM7_KERNEL
+ro.confg.hw_appfsversion=U8800PROVCM7_SYSIMG
+#
+debug.composition.type=gpu
+persist.sys.composition.type=gpu
+persist.sys.ui.hw=true
+dalvik.vm.lockprof.threshold=500
+dalvik.vm.dexopt-flags=m=y
+dalvik.vm.heapsize=32m
+dalvik.vm.execution-mode=int:jit
+dalvik.vm.dexopt-data-only=1
+ro.config.hw_menu_unlockscreen=false
+ro.service.swiqi.supported=true
+debug.sf.hw=1
+#
+debug.sf.electron_frames=24
+#
