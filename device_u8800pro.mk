@@ -5,6 +5,18 @@ $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
 DEVICE_PACKAGE_OVERLAYS := device/huawei/u8800pro/overlay
 
+# Broadcom FM radio
+$(call inherit-product, vendor/cyanogen/products/bcm_fm_radio.mk)
+
+# Include GSM stuff
+$(call inherit-product, vendor/cyanogen/products/gsm.mk)
+
+# common msm7x30 configs
+$(call inherit-product, device/htc/msm7x30-common/msm7x30.mk)
+
+# Inherit some common cyanogenmod stuff.
+$(call inherit-product, vendor/cyanogen/products/common_full.mk)
+
 # Discard inherited values and use our own instead.
 PRODUCT_NAME := u8800pro
 PRODUCT_DEVICE := u8800pro
@@ -23,37 +35,16 @@ PRODUCT_PACKAGES += \
     lights.u8800pro \
     gralloc.u8800pro \
     camera.u8800pro \
-    libOmxCore \
-    libOmxVdec \
-    libOmxVenc \
     dexpreopt \
-    Torch \
-    ADWLauncher \
-    FM \
-    DSPManager \
-    ThemeChooser \
-    ThemeManager \
+    AicBootFix \
     CMAppBackgroundChooser \
-    CMAppsChanger \
     CMBackgroundChooser \
-    CMBootanimation \
-    CMBootsound \
-    CMCalibrator \
-    CMCompass \
-    CMCompassCalibrator \
     CMContacts \
     CMDroidwall \
-    CMFontsChanger \
-    CMFrameworksChanger \
-    CMParts \
-    CMPartsFinder \
-    CMScreenshot \
-    CMShutdownanimation \
-    CMTaskSwitcher \
     CMTimers \
-    CMTSCalibration \
-    
-
+    GpsTracker \
+    Torch \
+        
 # proprietary side of the device
 $(call inherit-product-if-exists, vendor/huawei/u8800pro/u8800pro-vendor.mk)
 
@@ -104,37 +95,18 @@ PRODUCT_COPY_FILES += \
 
 # Install the features available on this device.
 PRODUCT_COPY_FILES += \
-    frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:/system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.sensor.compass.xml:/system/etc/permissions/android.hardware.sensor.compass.xml \
-    frameworks/base/data/etc/android.hardware.sensor.accelerometer.xml:/system/etc/permissions/android.hardware.sensor.accelerometer.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml
-
+    
 # prebuilt
 PRODUCT_COPY_FILES += \
-    device/huawei/u8800pro/prebuilt/libhardware_legacy.so:/system/lib/libhardware_legacy.so \
     device/huawei/u8800pro/prebuilt/overlay.default.so:/system/lib/hw/overlay.default.so \
     device/huawei/u8800pro/prebuilt/BCM4329.hcd:/system/etc/bluetooth/BCM4329.hcd \
     device/huawei/u8800pro/prebuilt/dhd.ko:/system/wifi/dhd.ko
 
-# CM7 prebuilts
+# CM7 bootanimation
 PRODUCT_COPY_FILES += \
     vendor/cyanogen/prebuilt/hdpi/media/bootanimation.zip:system/media/bootanimation.zip \
-    vendor/cyanogen/prebuilt/common/bin/compcache:system/bin/compcache \
-    vendor/cyanogen/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache \
-    vendor/cyanogen/prebuilt/common/bin/sysinit:system/bin/sysinit \
-    vendor/cyanogen/prebuilt/common/xbin/htop:system/xbin/htop \
-    vendor/cyanogen/prebuilt/common/xbin/irssi:system/xbin/irssi \
-    vendor/cyanogen/prebuilt/common/xbin/powertop:system/xbin/powertop \
-    vendor/cyanogen/prebuilt/common/etc/apns-conf.xml:system/etc/apns-conf.xml \
-    vendor/cyanogen/prebuilt/common/etc/init.local.rc:system/etc/init.local.rc \
-    vendor/cyanogen/prebuilt/common/etc/resolv.conf:system/etc/resolv.conf \
-    vendor/cyanogen/prebuilt/common/etc/sysctl.conf:system/etc/sysctl.conf     
+    vendor/cyanogen/prebuilt/hdpi/media/shutdownanimation.zip:system/media/shutdownanimation.zip
     
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.android.dateformat=dd-MM-yyyy \
@@ -181,12 +153,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vold.switchablepair=/mnt/sdcard,/HWUserData \
     ro.vold.umsdirtyratio=20 \
 
-# u8800pro uses high-density artwork where available
-PRODUCT_LOCALES += hdpi
-
-# we have enough storage space to hold precise GC data
-PRODUCT_TAGS += dalvik.gc.type-precise
-
 # This should not be needed but on-screen keyboard uses the wrong density without it.
 PRODUCT_PROPERTY_OVERRIDES += \
     qemu.sf.lcd_density=240 
@@ -208,11 +174,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.notification_sound=Tinkerbell.ogg \
     ro.config.alarm_alert=Alarm_Classic.ogg \
     ro.config.ringtone=Ring_Digital_02.ogg \
-    ro.setupwizard.mode=DISABLED
+    ro.setupwizard.mode=OPTIONAL
 
 # addon by Geno
 $(call inherit-product-if-exists, addon/addon.mk)
 $(call inherit-product-if-exists, device/huawei/u8800pro/wifi/wifi.mk)
 
-# common msm7x30 configs
-$(call inherit-product, device/htc/msm7x30-common/msm7x30.mk)
